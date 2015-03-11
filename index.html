@@ -28,25 +28,33 @@
 		
 	 	camera.position.z = 5;//move camera out, which also starts at 0,0,0
 		
-		var cube;
 		function makeCube(width, height, depth, posX, posY, posZ){
 			var geometry = new THREE.BoxGeometry(width,height,depth);
 			var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-			cube = new THREE.Mesh(geometry, material);
+			var cube = new THREE.Mesh(geometry, material);
 			cube.position.x = posX;
 			cube.position.y = posY;
 			cube.position.z = posX;
-			
 			scene.add(cube); 
+			return cube;
 		}
 		
-		makeCube(1, .2,.4, 0, 1, 2);
+		var cubeCenter = makeCube(1, .2,.4, 0, 1, 2);
+		var cubeRight  = makeCube(1, .2,.4, 2, 1, 2);
+		var cubeLeft   = makeCube(1, .2,.4, -2, 1, 2);
+		
 		
 		function render(){
 			requestAnimationFrame(render); //pauses when the user goes to another tab
 			
-			cube.rotation.x+=.01;
-			cube.rotation.y+=.01;
+			cubeCenter.rotation.x+=.01;
+			cubeCenter.rotation.y+=.01;
+			
+			cubeRight.rotation.x+=.01;
+			cubeRight.rotation.y+=.01;
+			
+			cubeLeft.rotation.x+=.01;
+			cubeLeft.rotation.y+=.01;
 			
 			renderer.render(scene, camera);
 		}
