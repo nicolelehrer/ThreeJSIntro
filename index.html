@@ -34,7 +34,7 @@
 			var cube = new THREE.Mesh(geometry, material);
 			cube.position.x = posX;
 			cube.position.y = posY;
-			cube.position.z = posX;
+			cube.position.z = posZ;
 			scene.add(cube); 
 			return cube;
 		}
@@ -44,17 +44,19 @@
 		var cubeLeft   = makeCube(1, .2,.4, -2, 1, 2);
 		
 		
+		// docs say this is one way how to update position, rotation
+		// object.position = start_position;
+		// object.quaternion = quaternion;
+		// object.updateMatrix();
+		
+		
 		function render(){
 			requestAnimationFrame(render); //pauses when the user goes to another tab
 			
 			cubeCenter.rotation.x+=.01;
 			cubeCenter.rotation.y+=.01;
 			
-			cubeRight.rotation.x+=.01;
-			cubeRight.rotation.y+=.01;
-			
-			cubeLeft.rotation.x+=.01;
-			cubeLeft.rotation.y+=.01;
+			// camera.rotation.z+=.01;
 			
 			renderer.render(scene, camera);
 		}
