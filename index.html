@@ -3,7 +3,8 @@
 		<title>My first Three.js app</title> 
 		<style> 
 			body { margin: 0; } 
-			canvas { width: 100%; height: 100% } 
+			canvas { width: 100%; height: 100%} 
+			
 		</style> 
 	</head> 
 	<body>
@@ -20,7 +21,11 @@
 				//near and far clipping planes
 		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1 , 1000);
 			//a renderer
-		var renderer = new THREE.WebGLRenderer();
+		
+		//https://community.leapmotion.com/t/how-to-change-the-background-from-black-to-transparent-in-light-pinch-vr-example-js/1967
+		var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+
+		renderer.setClearColor(0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		
 		//<canvas> element
@@ -28,10 +33,16 @@
 		
 	 	camera.position.z = 5;//move camera out, which also starts at 0,0,0
 		
+		addLights();
+		
+		
 		function makeCube(width, height, depth, posX, posY, posZ){
 			var geometry = new THREE.BoxGeometry(width,height,depth);
-			var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+			
+			var material = new THREE.MeshPhongMaterial( { ambient: 0x2e4242, color: 0x2e4242, specular: 0xC0E0DB, shininess: 5, shading: THREE.FlatShading } ) ;
 			var cube = new THREE.Mesh(geometry, material);
+			
+			
 			cube.position.x = posX;
 			cube.position.y = posY;
 			cube.position.z = posZ;
@@ -39,9 +50,9 @@
 			return cube;
 		}
 		
-		var cubeCenter = makeCube(1, .2,.4, 0, 1, 2);
-		var cubeRight  = makeCube(1, .2,.4, 2, 1, 2);
-		var cubeLeft   = makeCube(1, .2,.4, -2, 1, 2);
+		var cubeCenter = makeCube(.1, .1,.4, 0, 1, 2);
+		var cubeRight  = makeCube(.1, .2,.4, 2, 1, 2);
+		var cubeLeft   = makeCube(.05, .2,.4, -2, 1, 2);
 		
 		
 		// docs say this is one way how to update position, rotation
@@ -50,13 +61,41 @@
 		// object.updateMatrix();
 		
 		
+		function addLights(){
+			
+			var ambientLight = new THREE.AmbientLight( 0xffffff );
+			scene.add( ambientLight );
+			
+
+			var lights = [];
+			lights[0] = new THREE.PointLight( 0xffffff, 1, 0 );
+			lights[1] = new THREE.PointLight( 0xffffff, 1, 0 );
+			lights[2] = new THREE.PointLight( 0xffffff, 1, 0 );
+
+			lights[0].position.set( 0, 200, 0 );
+			lights[1].position.set( 100, 200, 100 );
+			lights[2].position.set( -100, -200, -100 );
+
+			scene.add( lights[0] );
+			scene.add( lights[1] );
+			scene.add( lights[2] );
+			
+		}
+		
+		
+		
 		function render(){
 			requestAnimationFrame(render); //pauses when the user goes to another tab
 			
 			cubeCenter.rotation.x+=.01;
 			cubeCenter.rotation.y+=.01;
+
+			cubeLeft.rotation.x+=-.01;
+			cubeLeft.rotation.y+=-.01;
+
 			
-			// camera.rotation.z+=.01;
+			 camera.rotation.z+=.01;
+			 // camera.rotation.y+=.01;
 			
 			renderer.render(scene, camera);
 		}
