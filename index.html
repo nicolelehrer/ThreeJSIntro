@@ -9,40 +9,56 @@
 	</head> 
 	<body>
 		 <script src="js/three.min.js"></script> 
+		 
 		 <script> // Our Javascript will go here. 
 		
-			//need 3 things
-			//a scene
-		var scene = new THREE.Scene();
-
-			//a camera, with attributes
-				//field of view
-				//aspect ratio - width of element / its height
-				//near and far clipping planes
-		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1 , 1000);
-			//a renderer
+		//global vars
+		var cubeCenter, cubeRight, cubeLeft, scene, camera, renderer;
 		
+		init();
+		animate();
+		
+		
+		function init(){
+			
+		//need 3 things
+		//a scene
+		scene = new THREE.Scene();
+		//a camera, with attributes
+		//field of view
+		//aspect ratio - width of element / its height
+		//near and far clipping planes
+		camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1 , 1000);
+		//a renderer
 		//https://community.leapmotion.com/t/how-to-change-the-background-from-black-to-transparent-in-light-pinch-vr-example-js/1967
-		var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+		renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 
 		renderer.setClearColor(0xffffff, 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		
+
 		//<canvas> element
 		document.body.appendChild(renderer.domElement);
-		
-	 	camera.position.z = 5;//move camera out, which also starts at 0,0,0
-		
+
+		camera.position.z = 5;//move camera out, which also starts at 0,0,0
+
 		addLights();
+
+		cubeCenter = makeCube(.1, .1,.4, 0, 1, 2);
+		cubeRight  = makeCube(.1, .2,.4, 2, 1, 2);
+		cubeLeft   = makeCube(.05, .2,.4, -2, 1, 2);
+			
+		}
+		
+		function animate (){
+			render();
+			
+		}	
 		
 		
 		function makeCube(width, height, depth, posX, posY, posZ){
 			var geometry = new THREE.BoxGeometry(width,height,depth);
-			
-			var material = new THREE.MeshPhongMaterial( { ambient: 0x2e4242, color: 0x2e4242, specular: 0xC0E0DB, shininess: 5, shading: THREE.FlatShading } ) ;
+			var material = new THREE.MeshPhongMaterial( { ambient: 0x2e4242, color: 0x2e4242, specular: 0xC0E0DB, shininess: 5, shading: THREE.FlatShading } );
 			var cube = new THREE.Mesh(geometry, material);
-			
-			
 			cube.position.x = posX;
 			cube.position.y = posY;
 			cube.position.z = posZ;
@@ -50,9 +66,8 @@
 			return cube;
 		}
 		
-		var cubeCenter = makeCube(.1, .1,.4, 0, 1, 2);
-		var cubeRight  = makeCube(.1, .2,.4, 2, 1, 2);
-		var cubeLeft   = makeCube(.05, .2,.4, -2, 1, 2);
+		
+	
 		
 		
 		// docs say this is one way how to update position, rotation
@@ -83,7 +98,6 @@
 		}
 		
 		
-		
 		function render(){
 			requestAnimationFrame(render); //pauses when the user goes to another tab
 			
@@ -98,13 +112,7 @@
 			 // camera.rotation.y+=.01;
 			
 			renderer.render(scene, camera);
-		}
-		
-		
-		
-		
-		render();
-		
+		}		
 		</script>
 
 	</body> 
